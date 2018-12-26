@@ -77,6 +77,10 @@ ignored = ["github.com/kubernetes/repo-infra/kazel"]
   version = "1.27.7"
 
 [[constraint]]
+  name = "github.com/sacloud/libsacloud"
+  version = "1.5.0"
+
+[[constraint]]
   name = "istio.io/istio"
   version = "1.0.0"
 

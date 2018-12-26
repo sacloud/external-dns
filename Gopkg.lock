@@ -586,6 +586,19 @@
   revision = "a6e9df898b1336106c743392c48ee0b71f5c4efa"
 
 [[projects]]
+  digest = "1:3f0c8ea4e89de94026da33f213de55b3989b463018616b812bdfd3c75a2c71f0"
+  name = "github.com/sacloud/libsacloud"
+  packages = [
+    ".",
+    "api",
+    "sacloud",
+    "sacloud/ostype",
+  ]
+  pruneopts = ""
+  revision = "d9c34f2f4d8da4c8339d3c64825174acd821c61f"
+  version = "v1.5.0"
+
+[[projects]]
   digest = "1:7f569d906bdd20d906b606415b7d794f798f91a62fcfb6a4daa6d50690fb7a3f"
   name = "github.com/satori/go.uuid"
   packages = ["."]
