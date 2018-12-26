@@ -228,6 +228,8 @@ func main() {
 		)
 	case "transip":
 		p, err = provider.NewTransIPProvider(cfg.TransIPAccountName, cfg.TransIPPrivateKeyFile, domainFilter, cfg.DryRun)
+	case "sakuracloud":
+		p, err = provider.NewSakuraCloudProvider(domainFilter, cfg.DryRun, externaldns.Version)
 	default:
 		log.Fatalf("unknown dns provider: %s", cfg.Provider)
 	}
