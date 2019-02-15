@@ -61,9 +61,11 @@ type Config struct {
 	AWSBatchChangeSize       int
 	AWSBatchChangeInterval   time.Duration
 	AWSEvaluateTargetHealth  bool
+	AWSAPIRetries            int
 	AzureConfigFile          string
 	AzureResourceGroup       string
 	CloudflareProxied        bool
+	CloudflareZonesPerPage   int
 	InfobloxGridHost         string
 	InfobloxWapiPort         int
 	InfobloxWapiUsername     string
@@ -130,12 +132,14 @@ var defaultConfig = &Config{
 	AWSZoneType:              "",
 	AWSZoneTagFilter:         []string{},
 	AWSAssumeRole:            "",
-	AWSBatchChangeSize:       4000,
+	AWSBatchChangeSize:       1000,
 	AWSBatchChangeInterval:   time.Second,
 	AWSEvaluateTargetHealth:  true,
+	AWSAPIRetries:            3,
 	AzureConfigFile:          "/etc/kubernetes/azure.json",
 	AzureResourceGroup:       "",
 	CloudflareProxied:        false,
+	CloudflareZonesPerPage:   50,
 	InfobloxGridHost:         "",
 	InfobloxWapiPort:         443,
 	InfobloxWapiUsername:     "admin",
@@ -248,9 +252,11 @@ func (cfg *Config) ParseFlags(args []string) error {
 	app.Flag("aws-batch-change-size", "When using the AWS provider, set the maximum number of changes that will be applied in each batch.").Default(strconv.Itoa(defaultConfig.AWSBatchChangeSize)).IntVar(&cfg.AWSBatchChangeSize)
 	app.Flag("aws-batch-change-interval", "When using the AWS provider, set the interval between batch changes.").Default(defaultConfig.AWSBatchChangeInterval.String()).DurationVar(&cfg.AWSBatchChangeInterval)
 	app.Flag("aws-evaluate-target-health", "When using the AWS provider, set whether to evaluate the health of a DNS target (default: enabled, disable with --no-aws-evaluate-target-health)").Default(strconv.FormatBool(defaultConfig.AWSEvaluateTargetHealth)).BoolVar(&cfg.AWSEvaluateTargetHealth)
+	app.Flag("aws-api-retries", "When using the AWS provider, set the maximum number of retries for API calls before giving up.").Default(strconv.Itoa(defaultConfig.AWSAPIRetries)).IntVar(&cfg.AWSAPIRetries)
 	app.Flag("azure-config-file", "When using the Azure provider, specify the Azure configuration file (required when --provider=azure").Default(defaultConfig.AzureConfigFile).StringVar(&cfg.AzureConfigFile)
 	app.Flag("azure-resource-group", "When using the Azure provider, override the Azure resource group to use (optional)").Default(defaultConfig.AzureResourceGroup).StringVar(&cfg.AzureResourceGroup)
 	app.Flag("cloudflare-proxied", "When using the Cloudflare provider, specify if the proxy mode must be enabled (default: disabled)").BoolVar(&cfg.CloudflareProxied)
+	app.Flag("cloudflare-zones-per-page", "When using the Cloudflare provider, specify how many zones per page listed, max. possible 50 (default: 50)").Default(strconv.Itoa(defaultConfig.CloudflareZonesPerPage)).IntVar(&cfg.CloudflareZonesPerPage)
 	app.Flag("infoblox-grid-host", "When using the Infoblox provider, specify the Grid Manager host (required when --provider=infoblox)").Default(defaultConfig.InfobloxGridHost).StringVar(&cfg.InfobloxGridHost)
 	app.Flag("infoblox-wapi-port", "When using the Infoblox provider, specify the WAPI port (default: 443)").Default(strconv.Itoa(defaultConfig.InfobloxWapiPort)).IntVar(&cfg.InfobloxWapiPort)
 	app.Flag("infoblox-wapi-username", "When using the Infoblox provider, specify the WAPI username (default: admin)").Default(defaultConfig.InfobloxWapiUsername).StringVar(&cfg.InfobloxWapiUsername)
